@@ -1,0 +1,19 @@
+@charset 'utf-8';
+
+.cate_wrap {
+    display: flex;
+/*     justify-content: space-between; */
+    flex-wrap: wrap;
+}
+
+.subName {
+	flex-basis: 25%;
+}
+
+.cate_list a {
+	display: inline-block;
+}
+
+ul li a:hover {
+    text-decoration: underline;
+}

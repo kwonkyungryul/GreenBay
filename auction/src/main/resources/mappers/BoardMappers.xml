@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mappers.BoardMapper">
+
+	<sql id="search">
+		<choose>
+			<when test="searchOpt == 'all'">
+				WHERE boardName LIKE CONCAT( '%', #{words}, '%' )
+				OR boardCode LIKE CONCAT( '%', #{words}, '%' )
+			</when>
+
+			<otherwise>
+				WHERE
+					${searchOpt} like CONCAT( '%', #{words}, '%' )
+			</otherwise>
+		</choose>
+	</sql>
+
+	<insert id="setBoard">
+		INSERT INTO
+			board
+		SET
+			boardCode	 = #{boardCode},
+			boardName	 = #{boardName},
+			boardMaker	 = #{boardMaker},
+			boardColor	 = #{boardColor},
+			boardType	 = #{boardType},
+			boardRegdate = now()
+	</insert>
+	
+	<insert id="createTblArticle" parameterType="String">
+		${str} ##DAOImpl에서 만들어 놓은 쿼리 변수를 가져오기
+	</insert>
+	
+	<insert id="createTblComment" parameterType="String">
+		${str}
+	</insert>
+	
+	<select id="getBoardList" resultType="boardvo">
+		SELECT * FROM
+			board
+		<include refid="search"></include>
+		ORDER BY
+			bseq
+		DESC
+	</select>
+
+	<delete id="deleteBoard">
+		DELETE FROM
+			board
+		WHERE
+			boardCode = #{boardCode}
+	</delete>
+
+	<update id="dropTblArticle" parameterType="String">
+		${str}
+	</update>
+
+	<update id="dropTblComment" parameterType="String">
+		${str}
+	</update>
+
+	<select id="getBoardCode" resultType="int">
+		SELECT COUNT(boardCode) FROM
+			board
+		WHERE
+			boardCode = #{boardCode}
+	</select>
+
+	<select id="getBoardCount" resultType="int">
+		SELECT COUNT(bseq) FROM
+			board
+	</select>
+
+</mapper>

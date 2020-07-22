@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.example.auction.model.UserVO" alias="uservo" />
+		<typeAlias type="com.example.auction.model.BoardVO" alias="boardvo" />
+		<typeAlias type="com.example.auction.model.ArticleVO" alias="articlevo" />
+		<typeAlias type="com.example.auction.model.CommentVO" alias="commentvo" />
+		<typeAlias type="com.example.auction.model.MainCateVO" alias="maincatevo" />
+		<typeAlias type="com.example.auction.model.SubCateVO" alias="subcatevo" />
+		<typeAlias type="com.example.auction.model.ItemVO" alias="itemvo" />
+		<typeAlias type="com.example.auction.model.BidderInfoVO" alias="biddervo" />
+	</typeAliases>
+</configuration>

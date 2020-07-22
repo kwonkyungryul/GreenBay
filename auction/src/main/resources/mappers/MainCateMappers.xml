@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mappers.MainCateMappers">
+
+<insert id="setMainCate">
+	INSERT INTO
+		mainCate
+	SET
+		mainCode = #{mainCode},
+		mainName = #{mainName}
+</insert>
+
+<select id="getMainCateList" resultType="subcatevo">
+<!-- 	SELECT -->
+<!-- 		mainCode, -->
+<!-- 		mainName -->
+<!-- 	FROM -->
+<!-- 		mainCate -->
+<!-- 	ORDER BY -->
+<!-- 		mainCode -->
+<!-- 	ASC -->
+	SELECT
+		b.mainName,
+		b.mainCode,
+		s.subName,
+		s.subCode
+	FROM
+		mainCate as b,
+		subCate as s
+	WHERE
+		b.mainName = s.mainName
+	GROUP BY
+		b.mainName
+	ORDER BY
+		s.mainName
+	ASC
+
+</select>
+
+<select id="getMainCateCountOne" resultType="int">
+	SELECT COUNT(mainCode) FROM
+		mainCate
+	WHERE
+		mainCode = #{mainCode}
+</select>
+
+<select id="getMainCateCountAll" resultType="int">
+	SELECT COUNT(mainCode) FROM
+		mainCate
+</select>
+
+<delete id="setDeleteMainCate">
+	DELETE FROM
+		mainCate
+	WHERE
+		mainName = #{mainName}
+</delete>
+
+</mapper>

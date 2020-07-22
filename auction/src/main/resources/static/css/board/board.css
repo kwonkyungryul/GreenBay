@@ -1,0 +1,20 @@
+@charset "UTF-8";
+.clrBox {
+	display: inline-block;
+	width: 35px;
+	height: 35px;
+}
+
+.radio_btn {
+	width: 15px;
+	height: 15px;
+}
+
+.title-wrap {
+	display: flex;
+    justify-content: space-between;
+}
+
+.active {
+	background-color: #2962FF;
+}

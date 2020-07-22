@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mappers.ArticleMapper">
+
+	<sql id="search">
+		<choose>
+			<when test="searchOpt == 'all'">
+				WHERE subject LIKE CONCAT( '%', #{words}, '%' )
+				OR writer LIKE CONCAT( '%', #{words}, '%' )
+				OR content LIKE CONCAT( '%', #{words}, '%' )
+			</when>
+
+			<otherwise>
+				WHERE
+					${searchOpt} LIKE CONCAT( '%', #{words}, '%' )
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="getBoardConfig" resultType="boardvo">
+		SELECT
+			boardColor,
+			boardName
+		FROM
+			board
+		WHERE
+			boardCode = #{boardCode}
+	</select>
+
+	<insert id="setArticle">
+
+		<selectKey resultType="int" keyProperty="ref" order="BEFORE">
+
+			SELECT IFNULL(MAX(ref), 0) + 1 FROM gb_article_${boardCode}
+
+		</selectKey>
+
+		INSERT INTO
+			gb_article_${boardCode}
+		SET
+			subject		 = #{subject},
+			writer		 = #{writer},
+			content		 = #{content},
+			fileName	 = #{fileName},
+			fileOriName	 = #{fileOriName},
+			fileUrl		 = #{fileUrl},
+			regdate		 = now(),
+			ref			 = #{ref}, <!-- 게시물 정렬 -->
+			re_step		 = 0, <!-- 답글 그룹 처리 -->
+			re_level	 = 0	<!-- 몇 번째 답글 -->
+	</insert>
+
+	<select id="getArticleList" resultType="articlevo">
+<!-- 		SELECT -->
+<!-- 			aseq, -->
+<!-- 			subject, -->
+<!-- 			writer, -->
+<!-- 			hit, -->
+<!-- 			re_level, -->
+<!-- 			date_format(regdate, '%Y-%m-%d') as regdate -->
+<!-- 		FROM -->
+<!-- 			gb_article_${boardCode} -->
+<!-- 		ORDER BY -->
+<!-- 			ref -->
+<!-- 		DESC, -->
+<!-- 			re_step -->
+<!-- 		ASC -->
+
+		SELECT
+			a.*,
+			(SELECT COUNT(c.cseq) FROM gb_comment_${boardCode} AS c WHERE a.aseq = c.aseq) AS cnt
+		FROM
+			gb_article_${boardCode}	AS a
+		
+		<include refid="search"></include>
+		
+		ORDER BY
+			ref
+		DESC,
+			re_step
+		ASC LIMIT
+			#{start},
+			#{end}
+	</select>
+	
+	<update id="hitUp">
+		UPDATE
+			gb_article_${boardCode}
+		SET
+			hit = hit + 1
+		WHERE
+			aseq = #{aseq}
+	</update>
+	
+	<select id="getArticleView" parameterType="hashMap" resultType="articlevo">
+		SELECT
+			aseq,
+			subject,
+			writer,
+			content,
+			hit,
+			fileName,
+			fileOriName,
+			fileUrl,
+			date_format(regdate, '%Y-%m-%d') as regdate
+		FROM
+			gb_article_${boardCode}
+		WHERE
+			aseq = #{aseq}
+	</select>
+
+	<select id="getArticleCount" resultType="int">
+		SELECT COUNT(aseq) FROM
+			gb_article_${boardCode}
+		<include refid="search"></include>
+	</select>
+	
+	<delete id="setArticleDelete">
+		DELETE FROM
+			gb_article_${boardCode}
+		WHERE
+			aseq = #{aseq}
+	</delete>
+	
+	<select id="getArticleReplyInfo" resultType="articlevo"> <!-- 기존 게시물 정보 가져오기 -->
+		SELECT
+			aseq,
+			ref,
+			re_step,
+			re_level
+		FROM
+			gb_article_${boardCode}
+		WHERE
+			aseq = #{aseq}
+	</select>
+	
+	<update id="setArticleRef">
+		UPDATE
+			gb_article_${boardCode}
+		SET
+			re_step = re_step + 1,
+			regdate = now()
+		WHERE
+			ref = #{ref} AND re_step > #{re_step}
+	</update> <!-- 답글 위치 바꾸기 -->
+	
+	<insert id="setArticleReply">
+		INSERT INTO
+			gb_article_${boardCode}
+		SET
+			subject		 = #{subject},
+			writer		 = #{writer},
+			content		 = #{content},
+			fileName	 = #{fileName},
+			fileOriName	 = #{fileOriName},
+			fileUrl		 = #{fileUrl},
+			ref			 = #{ref},
+			re_step		 = #{re_step} + 1,
+			re_level	 = #{re_level} + 1
+	</insert> <!-- 리스트 -->
+	
+	<select id="getArticleModify" resultType="articlevo">
+		SELECT
+			subject,
+			writer,
+			fileName,
+			fileOriName,
+			fileUrl,
+			hit,
+			regdate
+		FROM
+			gb_article_${boardCode}
+		WHERE
+			aseq = #{aseq}
+	</select>
+	
+	<update id="setArticleModify">
+		UPDATE
+			gb_article_${boardCode}
+		SET
+			subject = #{subject},
+			content = #{content}
+		WHERE
+			aseq = #{aseq}
+	</update>
+
+</mapper>

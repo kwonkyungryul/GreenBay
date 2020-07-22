@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mappers.ItemMappers">
+
+	<sql id="search">
+		<choose>
+			<when test="searchOpt == 'all'">
+				WHERE item_Name LIKE CONCAT( '%', #{words}, '%' )
+				OR subName LIKE CONCAT( '%', #{words}, '%' )
+			</when>
+
+			<otherwise>
+				WHERE
+					${searchOpt} LIKE CONCAT( '%', #{words}, '%' )
+			</otherwise>
+		</choose>
+	</sql>
+
+
+<insert id="setItem">
+	INSERT INTO
+		items
+	SET
+		mainCate			 = #{mainCate},
+		subCate				 = #{subCate},
+		item_Seller			 = #{item_Seller},
+		item_Name			 = #{item_Name},
+		item_Detail			 = #{item_Detail},
+		item_StartPrice		 = #{item_StartPrice},
+		item_currentPrice	 = #{item_StartPrice},
+		item_BiddingUnit	 = #{item_BiddingUnit},
+		item_StartDate		 = #{item_StartDate},
+		item_EndDate		 = #{item_EndDate},
+		item_DeliveryWay	 = #{item_DeliveryWay},
+		item_DeliveryPrice	 = #{item_DeliveryPrice},
+		originFileName		 = #{originFileName},
+		fileSize			 = #{fileSize},
+		safeFile			 = #{safeFile},
+		item_Regdate		 = now()
+</insert>
+
+<select id="getItemList" resultType="itemvo">
+	SELECT * FROM
+		items
+	<include refid="search"></include>
+	ORDER BY
+		item_seq
+	DESC LIMIT #{start}, #{end}
+</select>
+
+
+<select id="getItems" resultType="itemvo">
+	SELECT * FROM
+		items
+	ORDER BY
+		item_seq
+	DESC LIMIT #{start}, #{end}
+</select>
+
+
+<select id="getItemView" resultType="itemvo">
+	SELECT * FROM
+		items
+	WHERE
+		item_seq = #{item_seq}
+</select>
+
+<select id="getItemCount" resultType="int">
+	SELECT COUNT(item_seq) FROM
+		items
+	<include refid="search"></include>
+</select>
+
+<delete id="setItemDelete">
+	DELETE FROM
+		items
+	WHERE
+		item_seq = #{item_seq}
+</delete>
+
+<insert id="setDeleteBidInfo">
+	${str}
+</insert>
+
+<select id="selectedItemList" resultType="itemvo">
+	SELECT * FROM
+		items
+	WHERE
+		mainCate = #{mainCate} AND subCate = #{subCate}
+</select>
+
+<update id="hitUp">
+	UPDATE
+		items
+	SET
+		item_hit = item_hit + 1
+	WHERE
+		item_seq = #{item_seq}
+</update>
+
+</mapper>

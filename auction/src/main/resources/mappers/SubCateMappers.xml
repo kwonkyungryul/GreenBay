@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mappers.SubCateMappers">
+
+<insert id="setSubCate">
+	INSERT INTO
+		subCate
+	SET
+		mainName = #{mainName},
+		subCode	 = #{subCode},
+		subName	 = #{subName}
+</insert>
+
+<select id="getSubCateList" resultType="subcatevo">
+	SELECT
+		mainName,
+		subCode,
+		subName
+	FROM
+		subCate
+	ORDER BY
+		mainName
+	ASC
+</select>
+
+<select id="getSubCateCountOne" resultType="int">
+	SELECT COUNT(subCode) FROM
+		subCate
+	WHERE
+		mainName = #{mainName} AND subCode = #{subCode} 
+</select>
+
+<delete id="setDeleteSubCate">
+	DELETE FROM
+		subCate
+	WHERE
+		mainName = #{mainName} AND subName = #{subName}
+</delete>
+
+<select id="selectedSubCateList" resultType="subcatevo">
+		SELECT
+			mainName,
+			subCode,
+			subName
+		FROM
+			subCate
+		WHERE
+			mainName = #{mainName}
+	</select>
+
+</mapper>

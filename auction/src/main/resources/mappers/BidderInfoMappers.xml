@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mappers.BidderInfoMappers">
+
+	<insert id="setBid">
+		INSERT INTO
+			bidderInfo
+		SET
+			item_seq	 = #{item_seq},
+			user_ID	 	 = #{user_ID},
+			bid_Price	 = #{bid_Price},
+			bid_Unit	 = #{bid_Unit},
+			regdate		 = now()
+	</insert>
+	
+	<select id="getTopBidder" resultType="biddervo">
+		SELECT
+			user_ID,
+			bid_Price,
+			bid_Unit
+		FROM
+			bidderInfo
+		WHERE
+			item_seq = #{item_seq}
+		ORDER BY
+			bid_seq
+		DESC LIMIT 1
+	</select>
+	
+	<update id="bidCntUp">
+		UPDATE
+			items
+		SET
+			item_bidCnt = item_bidCnt + 1
+		WHERE
+			item_seq = #{item_seq} 
+	</update>
+
+</mapper>

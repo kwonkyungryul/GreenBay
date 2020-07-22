@@ -1,0 +1,29 @@
+@charset "UTF-8";
+
+#tbl_spacing {
+	padding: 20px 10%;
+}
+
+.comment_wrap {
+	display: flex;
+	justify-content: space-between;
+}
+
+.comment_left {
+	width: 85%;
+}
+
+.comment_right {
+	width: 14%;
+}
+
+button {
+	width: 100%;
+	height: 100px;
+}
+
+textarea {
+	width: 100%;
+	height: 100px;
+	padding: 5px;
+}

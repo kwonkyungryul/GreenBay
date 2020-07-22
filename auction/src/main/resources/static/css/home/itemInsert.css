@@ -1,0 +1,24 @@
+@charset 'utf-8';
+
+.tbl_line {
+    width: 100%;
+	height: 1px;
+    /* background-color: #eee; */
+    background-color: #eee;
+}
+
+.product_area {
+	width: 100%;
+	height: 250px;
+	border: 1px solid #ccc;
+	padding: 20px;
+	font-size: 16px;
+}
+
+.btn_150 {
+    height: 45px;
+}
+
+.img_size {
+	width: 200px;
+}

@@ -1,0 +1,86 @@
+@charset 'utf-8';
+
+.all_wrap,
+#nav_wrap,
+.right_top_wrap,
+.right_bottom_box_wrap
+ {
+    display: flex;
+    justify-content: space-between;
+}
+
+.site_left {
+    flex-basis: 15%;
+    background-color: #343a40;
+}
+
+.site_right {
+    flex-basis: 85%;
+    padding: 0;
+    background-color: #f4f6f9;
+}
+
+.icon {
+    flex-basis: 20%;
+}
+
+.icon_title {
+    flex-basis: 60%;    
+}
+
+.icon_arrow {
+    flex-basis: 20%;
+    text-align: right;
+}
+
+.left_hr {
+    border: 0;
+
+    border-top: 1px solid rgba(255, 255, 255, .2);
+}
+
+.right_hr {
+    border: 0;
+
+    border-top: 1px solid rgba(0, 0, 0, .2);
+}
+
+.one_box {
+    background-color: #17a2b8;
+    flex-basis: 24%;
+    height: 150px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.two_box {
+    background-color: #28a745;
+    flex-basis: 24%;
+    height: 150px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.three_box {
+    background-color: #ffc107;
+    flex-basis: 24%;
+    height: 150px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.four_box {
+    background-color: #dc3545;
+    flex-basis: 24%;
+    height: 150px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.box_right {
+    position: absolute;
+    top: 50%;
+    right: 5%;
+
+    transform: translateY(-50%);
+}

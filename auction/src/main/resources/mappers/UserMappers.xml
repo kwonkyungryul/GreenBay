@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mappers.UserMappers">
+
+	<sql id="search">
+		<choose>
+			<when test="searchOpt == 'all'">
+				WHERE user_ID LIKE CONCAT( '%', #{words}, '%' )
+				OR user_Name LIKE CONCAT( '%', #{words}, '%' )
+			</when>
+
+			<otherwise>
+				WHERE
+					${searchOpt} LIKE CONCAT( '%', #{words}, '%' )
+			</otherwise>
+		</choose>
+	</sql>
+
+
+	<insert id="setUser">
+		INSERT INTO
+			users
+		SET
+			user_ID		 = #{user_ID},
+			user_Passwd	 = #{user_Passwd},
+			user_Name	 = #{user_Name},
+			user_Email	 = #{user_Email},
+			user_Domain	 = #{user_Domain},
+			user_Addr	 = #{user_Addr},
+			user_Phone	 = #{user_Phone},
+			regdate		 = now()
+	</insert>
+	
+	<select id="getUsersList" resultType="uservo">
+		SELECT
+			useq,
+			user_ID,
+			user_Name,
+			user_Auth,
+			user_Email,
+			user_Domain,
+			date_format(regdate, '%Y-%m-%d') as regdate
+		FROM
+			users
+		<include refid="search"></include>
+		ORDER BY
+			useq
+		DESC LIMIT #{start}, #{end}
+	</select>
+	
+	<select id="getUsersCount" resultType="int">
+		SELECT COUNT(useq) FROM
+			users
+		<include refid="search"></include>
+	</select>
+	
+	<select id="loginCheck" resultType="uservo">
+		SELECT
+			user_ID,
+			user_Name,
+			user_Auth
+		FROM
+			users
+		WHERE
+			user_ID = #{user_ID} AND user_Passwd = #{user_Passwd}
+	</select>
+	
+	<select id="idCheck" resultType="int">
+		SELECT
+			COUNT(useq)
+		FROM
+			users
+		WHERE
+			user_ID = #{user_ID}
+	</select>
+	
+	<update id="setAuthUpdate">
+		UPDATE
+			users
+		SET
+			user_Auth = #{user_Auth}
+		WHERE
+			useq = #{useq}
+	</update>
+	
+	<select id="getUserView" resultType="uservo">
+		SELECT
+			useq,
+			user_ID,
+			user_Passwd,
+			user_Name,
+			user_Email,
+			user_Domain,
+			user_Addr,
+			user_Phone,
+			regdate
+		FROM
+			users
+		WHERE
+			useq = #{useq}
+	</select>
+	
+	<update id="setUserModify">
+		UPDATE
+			users
+		SET
+			user_ID		 = #{user_ID},
+			user_Passwd	 = #{user_Passwd},
+			user_Name	 = #{user_Name},
+			user_Email	 = #{user_Email},
+			user_Domain	 = #{user_Domain},
+			user_Addr	 = #{user_Addr},
+			user_Phone	 = #{user_Phone}
+		WHERE
+			useq = #{useq}
+	</update>
+	
+	<delete id="setUserDelete">
+		DELETE FROM
+			users
+		WHERE
+			useq = #{useq}
+	</delete>
+
+</mapper>
